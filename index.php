@@ -1,3 +1,6 @@
+<?php 
+require 'config.php';
+ ?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -60,7 +63,14 @@
 </div>
 <!--==========================================================================================-->
 <div class="container my-4">
-  
+ <?php
+  $sql = 'SELECT * FROM `notes`';
+  $result = mysqli_query($conn, $sql);
+  while($row = mysqli_fetch_assoc($result)){
+    echo $row['sno'] . ". Title ". $row['title'] . "Discription". $row['discription'];
+    echo "<br>";
+  }
+ ?>
 </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
