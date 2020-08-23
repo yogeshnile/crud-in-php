@@ -1,36 +1,6 @@
 <?php require 'config.php'; ?>
 
-<?php 
-$insert = false;
-$update = false;
-$delete = false;
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  if (isset( $_POST['snoEdit'])){
-      // Update the record
-    $sno = $_POST["snoEdit"];
-    $title = $_POST["titleEdit"];
-    $description = $_POST["discEdit"];
-
-    $sql = "UPDATE `notes` SET `title` = '$title',`discription` = '$description' WHERE `notes`.`sno` = $sno";
-    $result = mysqli_query($conn, $sql);
-    if ($result) {
-    $update = true;
-    }
-  }
-  else {
-  $title = $_POST["title"];
-  $disc = $_POST["disc"];
-
-  $sql = "INSERT INTO `notes` (`title`, `discription`) VALUES ('$title', '$disc');";
-  $result = mysqli_query($conn, $sql);
-
-  if ($result) {
-    $insert = true;
-  }
-}
-}
- ?>
+<?php require 'crud.php'; ?>
 
 <!doctype html>
 <html lang="en">
@@ -50,10 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!--==========================================================================================-->
 <!-- Body Part -->
   <body>
-<!--==========================================================================================-->
-                  <!--  EditModal Part  -->
-
-  
+<!--==========================================================================================-->  
 <!-- Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -91,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
-  <a class="navbar-brand" href="#">TODO List</a>
+  <a class="navbar-brand" href="/todo/">TODO List</a>
 
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -100,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/todo/">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">About</a>
@@ -116,25 +83,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   </div>
 <!--==========================================================================================-->
 </nav>
+<?php require 'message.php'; ?>
 
-<?php 
-if ($insert) {
-  echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
-  <strong>success!</strong> Your record insert successfully.
-  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-    <span aria-hidden='true'>&times;</span>
-  </button>
-</div>";
-}
-if ($update) {
-  echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
-  <strong>success!</strong> Your record update successfully.
-  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-    <span aria-hidden='true'>&times;</span>
-  </button>
-</div>";
-}
- ?>
 <!--==========================================================================================-->
 <div class="container my-4">
   <h2>Add a Note</h2>
@@ -175,7 +125,7 @@ if ($update) {
       <td>".$row['title']."</td>
       <td>".$row['discription']."</td> 
       <td><button type='button' class='edit btn btn-outline-primary btn-sm' id=".$row['sno'].">Edit</button>
-       <button type='button' class='btn btn-outline-danger btn-sm'>Delete</button>  </td>
+       <button type='button' id=d".$row['sno']." class='delete btn btn-outline-danger btn-sm'>Delete</button>  </td>
     </tr>";//action buttons
   }
  ?>
@@ -205,7 +155,6 @@ if ($update) {
       edits = document.getElementsByClassName('edit');
       Array.from(edits).forEach((element)=>{
         element.addEventListener("click", (e)=>{
-          console.log("edit", );
           tr = e.target.parentNode.parentNode;
           title = tr.getElementsByTagName("td")[0].innerText;
           discription = tr.getElementsByTagName("td")[1].innerText;
@@ -214,6 +163,17 @@ if ($update) {
           snoEdit.value = e.target.id;
           console.log(e.target.id);
           $('#editModal').modal('toggle');
+        })
+      })
+
+      deletes = document.getElementsByClassName('delete');
+      Array.from(deletes).forEach((element)=>{
+        element.addEventListener("click", (e)=>{
+          tr = e.target.parentNode.parentNode;
+          sno = e.target.id.substr(1);
+          if (confirm("Are you sure you want to delete this note!")) {
+          window.location = `/todo/?delete=${sno}`;
+          }
         })
       })
     </script>
