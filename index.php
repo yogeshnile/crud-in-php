@@ -2,7 +2,23 @@
 
 <?php 
 $insert = false;
+$update = false;
+$delete = false;
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  if (isset( $_POST['snoEdit'])){
+      // Update the record
+    $sno = $_POST["snoEdit"];
+    $title = $_POST["titleEdit"];
+    $description = $_POST["discEdit"];
+
+    $sql = "UPDATE `notes` SET `title` = '$title',`discription` = '$description' WHERE `notes`.`sno` = $sno";
+    $result = mysqli_query($conn, $sql);
+    if ($result) {
+    $update = true;
+    }
+  }
+  else {
   $title = $_POST["title"];
   $disc = $_POST["disc"];
 
@@ -12,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if ($result) {
     $insert = true;
   }
+}
 }
  ?>
 
@@ -50,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <div class="modal-body">
 
         <form action="/todo/" method="POST">
+          <input type="hidden" name="snoEdit" id="snoEdit">
            <div class="form-group">
             <label for="title">Note Title</label>
             <input type="text" class="form-control" id="titleEdit" name="titleEdit" aria-describedby="emailHelp" required="">
@@ -58,13 +76,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <label for="disc">Note Discription</label>
             <textarea class="form-control" id="discEdit" name="discEdit" rows="3" required=""></textarea>
           </div>
-          <button type="submit" class="btn btn-primary">Add Note</button>
+          <button type="submit" class="btn btn-primary">Update Note</button>
         </form>
 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+      
       </div>
     </div>
   </div>
@@ -103,6 +121,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 if ($insert) {
   echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
   <strong>success!</strong> Your record insert successfully.
+  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+    <span aria-hidden='true'>&times;</span>
+  </button>
+</div>";
+}
+if ($update) {
+  echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+  <strong>success!</strong> Your record update successfully.
   <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
     <span aria-hidden='true'>&times;</span>
   </button>
@@ -148,7 +174,7 @@ if ($insert) {
       <th scope='row'>".$sno."</th>
       <td>".$row['title']."</td>
       <td>".$row['discription']."</td> 
-      <td><button type='button' class='edit btn btn-outline-primary btn-sm'>Edit</button>
+      <td><button type='button' class='edit btn btn-outline-primary btn-sm' id=".$row['sno'].">Edit</button>
        <button type='button' class='btn btn-outline-danger btn-sm'>Delete</button>  </td>
     </tr>";//action buttons
   }
@@ -185,6 +211,8 @@ if ($insert) {
           discription = tr.getElementsByTagName("td")[1].innerText;
           titleEdit.value = title;
           discEdit.value = discription;
+          snoEdit.value = e.target.id;
+          console.log(e.target.id);
           $('#editModal').modal('toggle');
         })
       })
