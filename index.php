@@ -33,7 +33,7 @@
       </div>
       <div class="modal-body">
 
-        <form action="/todo/" method="POST">
+        <form action="/crud-in-php/" method="POST">
           <input type="hidden" name="snoEdit" id="snoEdit">
            <div class="form-group">
             <label for="title">Note Title</label>
@@ -58,7 +58,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
-  <a class="navbar-brand" href="/todo/">TODO List</a>
+  <a class="navbar-brand" href="/crud-in-php/">TODO List</a>
 
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -66,29 +66,26 @@
 <!--==========================================================================================-->
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="/todo/">Home <span class="sr-only">(current)</span></a>
+      <li class="nav-item active mb-md-0 ml-md-3">
+        <a class="nav-link" href="/crud-in-php/">Home <span class="sr-only">(current)</span></a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item mb-md-0 ml-md-3">
         <a class="nav-link" href="#">About</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item mb-md-0 ml-md-3">
         <a class="nav-link" href="#">Contact Us</a>
       </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
   </div>
 <!--==========================================================================================-->
 </nav>
+
 <?php require 'message.php'; ?>
 
 <!--==========================================================================================-->
 <div class="container my-4">
   <h2>Add a Note</h2>
-  <form action="/todo/" method="POST">
+  <form action="/crud-in-php/" method="POST">
   <div class="form-group">
     <label for="title">Note Title</label>
     <input type="text" class="form-control" id="title" name="title" aria-describedby="emailHelp" required="">
@@ -114,25 +111,17 @@
   </thead>
   <tbody>
 
-     <?php
-  $sql = 'SELECT * FROM `notes`';
-  $result = mysqli_query($conn, $sql);
-  $sno=0;
-  while($row = mysqli_fetch_assoc($result)){
-    $sno = $sno+1;
-    echo "<tr>
-      <th scope='row'>".$sno."</th>
-      <td>".$row['title']."</td>
-      <td>".$row['discription']."</td> 
-      <td><button type='button' class='edit btn btn-outline-primary btn-sm' id=".$row['sno'].">Edit</button>
-       <button type='button' id=d".$row['sno']." class='delete btn btn-outline-danger btn-sm'>Delete</button>  </td>
-    </tr>";//action buttons
-  }
- ?>
+<?php require 'table.php'; ?>
 
   </tbody>
 </table>
 <hr>
+</div>
+<br>
+<div class="container">
+  <nav class="navbar navbar-light bg-dark">
+  	<p style="color: white;">Made with ❤️ by  <a href="https://twitter.com/yogeshnile">@YogeshNile</a><p>
+</nav>
 </div>
 <!--==========================================================================================-->
     <!-- Optional JavaScript -->
@@ -150,33 +139,8 @@
     $('#myTable').DataTable();
   } );
     </script>
-
-    <script type="text/javascript">
-      edits = document.getElementsByClassName('edit');
-      Array.from(edits).forEach((element)=>{
-        element.addEventListener("click", (e)=>{
-          tr = e.target.parentNode.parentNode;
-          title = tr.getElementsByTagName("td")[0].innerText;
-          discription = tr.getElementsByTagName("td")[1].innerText;
-          titleEdit.value = title;
-          discEdit.value = discription;
-          snoEdit.value = e.target.id;
-          console.log(e.target.id);
-          $('#editModal').modal('toggle');
-        })
-      })
-
-      deletes = document.getElementsByClassName('delete');
-      Array.from(deletes).forEach((element)=>{
-        element.addEventListener("click", (e)=>{
-          tr = e.target.parentNode.parentNode;
-          sno = e.target.id.substr(1);
-          if (confirm("Are you sure you want to delete this note!")) {
-          window.location = `/todo/?delete=${sno}`;
-          }
-        })
-      })
-    </script>
+<!--==========================================================================================-->
+    <script type="text/javascript" src="modal.js"></script>
 <!--==========================================================================================-->
   </body>
 </html>
