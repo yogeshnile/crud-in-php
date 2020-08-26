@@ -1,5 +1,12 @@
 # crud in php :notebook:
  - On this repo i develop crud opration todo app in php language.
+ 
+# How to run the project? :thinking:
+ - Clone github repository in your local system  `git clone https://github.com/yogeshnile/crud-in-php.git`
+ - Move crud-in-php repository in htdoc directory.
+ - Start Xampp server and create databse then upload [todo.sql](https://github.com/yogeshnile/crud-in-php/blob/master/todo.sql) file in database.
+ - Go to your browser and type http://localhost/crud-in-php/ in the address bar.
+ - Hurray! That's it. <br>
 
 ## Bug / Feature Request :man_technologist:
 If you find a bug (the website couldn't handle the query and / or gave undesired results), kindly open an issue [here](https://github.com/yogeshnile/crud-in-php/issues/new) by including your search query and the expected result.
